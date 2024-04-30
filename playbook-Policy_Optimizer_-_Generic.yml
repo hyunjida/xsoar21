@@ -1,0 +1,490 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.1.25
+    packID: PANOSPolicyOptimizer
+    packName: PAN-OS Policy Optimizer (beta)
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |-
+  This playbook is triggered by the Policy Optimizer incident type, and can execute any of the following sub-playbooks:
+  - Policy Optimizer - Manage Unused Rules
+  - Policy Optimizer - Manage Rules with Unused Applications
+  - Policy Optimizer - Manage Port Based Rules
+id: Policy Optimizer - Generic
+inputs:
+- description: Slack user to notify about unused rules.
+  key: slack_user
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: User email address to notify about unused rules.
+  key: email_address
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Specifies whether you want to auto-commit the configuration for the
+    PAN-OS policy changes automatically (Yes/No).
+  key: auto_commit
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Policy Optimizer - Generic
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: f962a7b0-cfd4-49fd-84b7-df1d173b932a
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: f962a7b0-cfd4-49fd-84b7-df1d173b932a
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": -120
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      auto_commit:
+        complex:
+          root: inputs.auto_commit
+      email_address:
+        complex:
+          root: inputs.email_address
+      slack_user:
+        complex:
+          root: inputs.slack_user
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 14ccf9b1-f86f-4e8d-898c-09b0f1a53b3d
+      iscommand: false
+      name: Policy Optimizer - Manage Port Based Rules
+      playbookId: Policy Optimizer - Manage Port Based Rules
+      type: playbook
+      version: -1
+    taskid: 14ccf9b1-f86f-4e8d-898c-09b0f1a53b3d
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 370
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      auto_commit:
+        complex:
+          root: inputs.auto_commit
+      email_address:
+        complex:
+          root: inputs.email_address
+      slack_user:
+        complex:
+          root: inputs.slack_user
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 4476823f-a9a9-49f8-8e9b-360ec85041b4
+      iscommand: false
+      name: Policy Optimizer - Manage Unused Rules
+      playbookId: Policy Optimizer - Manage Unused Rules
+      type: playbook
+      version: -1
+    taskid: 4476823f-a9a9-49f8-8e9b-360ec85041b4
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 370
+        }
+      }
+  "4":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: policyoptimizerusecase
+                root: incident
+          operator: isEqualString
+          right:
+            value:
+              simple: Manage Rules with Unused Applications
+      label: Manage Unused Applications
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      Manage Unused Applications:
+      - "8"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manage Unused Applications?
+      id: a4ab8365-7487-44cd-8f88-93bb340faa7a
+      iscommand: false
+      name: Manage Unused Applications
+      type: condition
+      version: -1
+    taskid: a4ab8365-7487-44cd-8f88-93bb340faa7a
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 40,
+          "y": 195
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "11"
+      "Yes":
+      - "10"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Close the investigation?
+      id: c2218b78-eefa-4c61-8b29-e976cf47eafb
+      iscommand: false
+      name: Close the investigation?
+      type: condition
+      version: -1
+    taskid: c2218b78-eefa-4c61-8b29-e976cf47eafb
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 545
+        }
+      }
+  "6":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: policyoptimizerusecase
+                root: incident
+          operator: isEqualString
+          right:
+            value:
+              simple: Manage Port Based Rules
+      label: Manage Port Based Rules
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      Manage Port Based Rules:
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manage Port Based Rules?
+      id: 9609c78d-8150-43b0-82e8-b3c2b3839b3b
+      iscommand: false
+      name: Manage Port Based Rules
+      type: condition
+      version: -1
+    taskid: 9609c78d-8150-43b0-82e8-b3c2b3839b3b
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 195
+        }
+      }
+  "7":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: policyoptimizerusecase
+                root: incident
+          operator: isEqualString
+          right:
+            value:
+              simple: Manage Unused Rules
+      label: Manage Unused Rules
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "5"
+      Manage Unused Rules:
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manage Unused Rules?
+      id: 6f03341e-b8d1-4ce7-876d-cde730c496bb
+      iscommand: false
+      name: Manage Unused Rules
+      type: condition
+      version: -1
+    taskid: 6f03341e-b8d1-4ce7-876d-cde730c496bb
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 195
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      auto_commit:
+        complex:
+          root: inputs.auto_commit
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 616d96d9-20ab-415b-8c13-d2734110eb0e
+      iscommand: false
+      name: Policy Optimizer - Manage Rules with Unused Applications
+      playbookId: Policy Optimizer - Manage Rules with Unused Applications
+      type: playbook
+      version: -1
+    taskid: 616d96d9-20ab-415b-8c13-d2734110eb0e
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 40,
+          "y": 370
+        }
+      }
+  "9":
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "4"
+      - "6"
+      - "7"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      usecasedescription:
+        simple: |-
+          This incident shows information about PAN-OS policy misconfigurations found by the PAN-OS Policy Optimizer that help automate your AppID adoption. See the different use-cases displayed in the layout tabs.
+
+          Manage unused rules - Identify and remove unused rules that do not pass traffic in your environment.
+
+          Manage port based rules - Migrate port-based rules to application-based allow rules to reduce the attack surface and safely enable applications on your network.
+
+          Manage rules with unused applications - If you have application-based Security policy rules that allow a large number of applications, you can remove unused applications (applications never seen on the rules) from those rules to only allow applications actually seen in the rule’s traffic. This strengthens your security posture by reducing the attack surface.
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: Set the use-case details to the layout.
+      id: d9379699-dda4-41b0-87ee-5ae6c7cd75dd
+      iscommand: true
+      name: Set description in layout
+      script: Builtin|||setIncident
+      type: regular
+      version: -1
+    taskid: d9379699-dda4-41b0-87ee-5ae6c7cd75dd
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 20
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: Builtin
+      description: commands.local.cmd.close.inv
+      id: 6551b126-9098-4340-8b34-23067b38e568
+      iscommand: true
+      name: Close investigation
+      script: Builtin|||closeInvestigation
+      type: regular
+      version: -1
+    taskid: 6551b126-9098-4340-8b34-23067b38e568
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 760,
+          "y": 720
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 30fad76e-d825-432c-87b7-4b39a065d50c
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 30fad76e-d825-432c-87b7-4b39a065d50c
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 890
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "5_11_#default#": 0.44
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1075,
+        "width": 1250,
+        "x": 40,
+        "y": -120
+      }
+    }
+  }
