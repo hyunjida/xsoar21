@@ -1,0 +1,1138 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.1.25
+    packID: PANOSPolicyOptimizer
+    packName: PAN-OS Policy Optimizer (beta)
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook helps identify and remove unused rules that do not pass
+  traffic in your environment.
+id: Policy Optimizer - Manage Unused Rules
+inputs:
+- description: Slack user to notify about unused rules.
+  key: slack_user
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: User email address to notify about unused rules.
+  key: email_address
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Specifies whether you want to auto-commit the configuration for the
+    PAN-OS policy changes automatically (Yes/No).
+  key: auto_commit
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Policy Optimizer - Manage Unused Rules
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 8259b490-c2aa-4ebe-8659-3fffd78812e2
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 8259b490-c2aa-4ebe-8659-3fffd78812e2
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 50
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    fieldMapping:
+    - incidentfield: PAN-OS Unused Rules
+      output:
+        complex:
+          accessor: UnusedRules
+          root: PanOS.PolicyOptimizer
+          transformers:
+          - args:
+              headers:
+                value:
+                  simple: "@name,@uuid\t,description,action,application,apps-allowed-count,apps-seen-count,source,source-user,service,destination,to,disabled,hit-count,from,last-app-seen-since-count,last-hit-timestamp,rule-creation-timestamp,rule-modification-timestamp"
+              title: {}
+            operator: JsonToTable
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      usage:
+        simple: Unused
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: PAN-OS Policy Optimizer
+      description: Gets unused, used, or any rules.
+      id: 6c4cfaae-8166-429e-81f2-b71eff1a3832
+      iscommand: true
+      name: PAN-OS - List unused rules
+      script: PAN-OS Policy Optimizer|||pan-os-po-get-rules
+      type: regular
+      version: -1
+    taskid: 6c4cfaae-8166-429e-81f2-b71eff1a3832
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1020,
+          "y": 480
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      brandname:
+        simple: PAN-OS Policy Optimizer
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns 'yes' if integration brand is available.
+      id: 216a2263-9170-4bba-84c4-ea11dd20afcf
+      iscommand: false
+      name: Is PAN-OS Policy Optimizer integration available?
+      script: IsIntegrationAvailable
+      type: condition
+      version: -1
+    taskid: 216a2263-9170-4bba-84c4-ea11dd20afcf
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 170
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 92d8f19e-4e2a-4ec9-8877-ddf0008cbad8
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 92d8f19e-4e2a-4ec9-8877-ddf0008cbad8
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 450,
+          "y": 2750
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 13d25d69-6ccb-462b-8f7e-f6d93f99ab57
+      iscommand: false
+      name: Manage unused rules
+      type: title
+      version: -1
+    taskid: 13d25d69-6ccb-462b-8f7e-f6d93f99ab57
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1020,
+          "y": 340
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: UnusedRules
+                root: PanOS.PolicyOptimizer
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "3"
+      "yes":
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Are there any unused rules?
+      id: be529235-69a7-404b-8615-0ce92a8c2ece
+      iscommand: false
+      name: Are there any unused rules?
+      type: condition
+      version: -1
+    taskid: be529235-69a7-404b-8615-0ce92a8c2ece
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1020,
+          "y": 640
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "9"
+      - "10"
+      - "28"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: af5e4ab7-5c02-4a49-879a-b8469cd747e7
+      iscommand: false
+      name: Notify about unused rules
+      type: title
+      version: -1
+    taskid: af5e4ab7-5c02-4a49-879a-b8469cd747e7
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1570,
+          "y": 810
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    form:
+      description: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+        Use the playbook to to see the rules' information and have the option to remove
+        them from your policy.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Please choose the action for the playbook to continue
+        options: []
+        optionsarg:
+        - simple: Delete rule
+        - simple: Manual action
+        placeholder: ""
+        readonly: false
+        required: false
+        tooltip: ""
+        type: singleSelect
+      sender: ""
+      title: Unused Rules
+      totalanswers: 0
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body: null
+      cc: null
+      format: ""
+      methods:
+      - email
+      subject:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to:
+        complex:
+          root: inputs.email_address
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      body:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      subject:
+        simple: PAN-OS Policy Optimizer has discovered unused rules
+      to:
+        complex:
+          root: inputs.email_address
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Sends an email using Gmail.
+      id: b985b89f-ba1c-4b8d-842c-8c1f65feea63
+      iscommand: false
+      name: Send mail
+      type: collection
+      version: -1
+    taskid: b985b89f-ba1c-4b8d-842c-8c1f65feea63
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 960,
+          "y": 1120
+        }
+      }
+  "9":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.email_address
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "7"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Is there an email address input configured?
+      id: f939de8c-79d8-4b34-879b-331d8547d8d4
+      iscommand: false
+      name: Is there an email address?
+      type: condition
+      version: -1
+    taskid: f939de8c-79d8-4b34-879b-331d8547d8d4
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1140,
+          "y": 950
+        }
+      }
+  "10":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.slack_user
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "27"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Is there a Slack user?
+      id: 87b68c73-1d25-4d7c-81d5-c3e5bff91d09
+      iscommand: false
+      name: Is there a Slack user?
+      type: condition
+      version: -1
+    taskid: 87b68c73-1d25-4d7c-81d5-c3e5bff91d09
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1570,
+          "y": 950
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "13"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 9e226a6c-cf1b-40ec-8b3a-14ad2e4fa7c9
+      iscommand: false
+      name: Take action
+      type: title
+      version: -1
+    taskid: 9e226a6c-cf1b-40ec-8b3a-14ad2e4fa7c9
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1360,
+          "y": 1290
+        }
+      }
+  "13":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: "0"
+                root: Unused Rules.Answers
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: delete rule
+      label: Delete rule
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "15"
+      Delete rule:
+      - "14"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Choose an action for the playbook.
+      id: 62282a57-cb86-4336-8281-337551c12d45
+      iscommand: false
+      name: Choose action to take
+      type: condition
+      version: -1
+    taskid: 62282a57-cb86-4336-8281-337551c12d45
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1360,
+          "y": 1440
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "16"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 66364bbf-e4b1-417e-8c8c-c58e62132c87
+      iscommand: false
+      name: Delete Rules
+      type: title
+      version: -1
+    taskid: 66364bbf-e4b1-417e-8c8c-c58e62132c87
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1680,
+          "y": 1610
+        }
+      }
+  "15":
+    continueonerrortype: ""
+    id: "15"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "17"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 65dc1511-18be-4f5d-890f-d463aa8b356f
+      iscommand: false
+      name: Manual Remediation
+      type: title
+      version: -1
+    taskid: 65dc1511-18be-4f5d-890f-d463aa8b356f
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1030,
+          "y": 1610
+        }
+      }
+  "16":
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "17"
+      "yes":
+      - "26"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      brandname:
+        simple: Panorama
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns 'yes' if integration brand is available.
+      id: c96682ac-6a9b-4782-8b6b-1f1397307e1a
+      iscommand: false
+      name: Is PAN-OS integration enabled?
+      script: IsIntegrationAvailable
+      type: condition
+      version: -1
+    taskid: c96682ac-6a9b-4782-8b6b-1f1397307e1a
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1680,
+          "y": 1740
+        }
+      }
+  "17":
+    continueonerrortype: ""
+    id: "17"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manually handle the unused policy rules.
+      id: a21ffd5c-a39b-4683-88cb-f357af1ba9a0
+      iscommand: false
+      name: Manually handle unused rules
+      type: regular
+      version: -1
+    taskid: a21ffd5c-a39b-4683-88cb-f357af1ba9a0
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1030,
+          "y": 1910
+        }
+      }
+  "18":
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "22"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      rulename:
+        complex:
+          accessor: "0"
+          root: Unused policy rules to delete.Answers
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Deletes a policy rule.
+      id: 89342b29-7415-49e7-8d3e-8b151fecdf79
+      iscommand: true
+      name: PAN-OS - Delete rules
+      script: '|||pan-os-delete-rule'
+      type: regular
+      version: -1
+    taskid: 89342b29-7415-49e7-8d3e-8b151fecdf79
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 2030,
+          "y": 2080
+        }
+      }
+  "22":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.auto_commit
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: "yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "22"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "24"
+      "yes":
+      - "23"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Is the auto-commit configuration input enabled?
+      id: d81ddb13-b78d-4c52-8b0d-26138e7e5417
+      iscommand: false
+      name: Auto-commit configuration input enabled?
+      type: condition
+      version: -1
+    taskid: d81ddb13-b78d-4c52-8b0d-26138e7e5417
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 2030,
+          "y": 2240
+        }
+      }
+  "23":
+    continueonerrortype: ""
+    id: "23"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: fd6c7011-7372-4db3-873f-470cb13f2274
+      iscommand: false
+      name: PAN-OS Commit Configuration
+      playbookId: PAN-OS Commit Configuration
+      type: playbook
+      version: -1
+    taskid: fd6c7011-7372-4db3-873f-470cb13f2274
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 2200,
+          "y": 2580
+        }
+      }
+  "24":
+    continueonerrortype: ""
+    id: "24"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "25"
+      "Yes":
+      - "23"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Should the playbook automatically commit the enabled configuration
+        input?
+      id: e29024e9-00eb-4e2d-889c-40c2da74bc4e
+      iscommand: false
+      name: Automatically commit PAN-OS configuration?
+      type: condition
+      version: -1
+    taskid: e29024e9-00eb-4e2d-889c-40c2da74bc4e
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1820,
+          "y": 2410
+        }
+      }
+  "25":
+    continueonerrortype: ""
+    id: "25"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manually commit the PAN-OS configuration.
+      id: 24b8a4e7-17f3-4d35-89c5-72ca140e8177
+      iscommand: false
+      name: Manually commit PAN-OS configuration
+      type: regular
+      version: -1
+    taskid: 24b8a4e7-17f3-4d35-89c5-72ca140e8177
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1590,
+          "y": 2580
+        }
+      }
+  "26":
+    continueonerrortype: ""
+    form:
+      description: Choose the policy rules to be deleted by the PAN-OS integration.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Unused policy rules to delete
+        options: []
+        optionsarg:
+        - complex:
+            accessor: '@name'
+            root: PanOS.PolicyOptimizer.UnusedRules
+        placeholder: ""
+        readonly: false
+        required: false
+        tooltip: Choose the policy rules to be deleted by the PAN-OS integration.
+        type: multiSelect
+      sender: ""
+      title: Unused policy rules to delete
+      totalanswers: 0
+    id: "26"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: Choose policy rules to delete
+      cc: null
+      format: ""
+      methods: []
+      subject: null
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to: null
+    nexttasks:
+      '#none#':
+      - "18"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Choose rules to be deleted by the playbook.
+      id: 9e0da4cd-1eff-4b44-8508-0c48fd7593d0
+      iscommand: false
+      name: Choose rules to delete
+      type: collection
+      version: -1
+    taskid: 9e0da4cd-1eff-4b44-8508-0c48fd7593d0
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 2030,
+          "y": 1910
+        }
+      }
+  "27":
+    continueonerrortype: ""
+    form:
+      description: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+        Use the playbook to to see the rules' information and have the option to remove
+        them from your policy.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Please choose the action for the playbook to continue
+        options: []
+        optionsarg:
+        - simple: Delete rule
+        - simple: Manual action
+        placeholder: ""
+        readonly: false
+        required: false
+        tooltip: ""
+        type: singleSelect
+      sender: ""
+      title: Unused Rules
+      totalanswers: 0
+    id: "27"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      cc: null
+      format: ""
+      methods:
+      - SlackV2
+      subject:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to:
+        complex:
+          root: inputs.email_address
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      body:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      subject:
+        simple: PAN-OS Policy Optimizer has discovered unused rules
+      to:
+        complex:
+          root: inputs.email_address
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Sends a Slack message to a user.
+      id: 4e24957c-6ba5-4d53-8bfa-7289ed5d0747
+      iscommand: false
+      name: Send Slack message
+      type: collection
+      version: -1
+    taskid: 4e24957c-6ba5-4d53-8bfa-7289ed5d0747
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 1760,
+          "y": 1120
+        }
+      }
+  "28":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.slack_user
+          operator: isEmpty
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.email_address
+          operator: isEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "28"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "12"
+      "yes":
+      - "29"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: No communication input configured?
+      id: a31f15dc-9733-4282-8649-0d44fbf58f92
+      iscommand: false
+      name: No communication input configured?
+      type: condition
+      version: -1
+    taskid: a31f15dc-9733-4282-8649-0d44fbf58f92
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 2130,
+          "y": 950
+        }
+      }
+  "29":
+    continueonerrortype: ""
+    form:
+      description: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+        Use the playbook to to see the rules' information and have the option to remove
+        them from your policy.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Please choose the action for the playbook to continue
+        options: []
+        optionsarg:
+        - simple: Delete rule
+        - simple: Manual action
+        placeholder: ""
+        readonly: false
+        required: false
+        tooltip: ""
+        type: singleSelect
+      sender: ""
+      title: Unused Rules
+      totalanswers: 0
+    id: "29"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      cc: null
+      format: ""
+      methods: []
+      subject:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to:
+        complex:
+          root: inputs.email_address
+    nexttasks:
+      '#none#':
+      - "12"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      body:
+        simple: PAN-OS Policy Optimizer has discovered unused rules in your environment.
+      subject:
+        simple: PAN-OS Policy Optimizer has discovered unused rules
+      to:
+        complex:
+          root: inputs.email_address
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Ask the user what action they want to take by a collection task.
+      id: f8a1f7c1-899d-4f5b-8cd6-5ad66a9ef65c
+      iscommand: false
+      name: Ask by task only
+      type: collection
+      version: -1
+    taskid: f8a1f7c1-899d-4f5b-8cd6-5ad66a9ef65c
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 2290,
+          "y": 1120
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "10_12_#default#": 0.44,
+      "22_23_yes": 0.3,
+      "28_12_#default#": 0.17,
+      "2_3_#default#": 0.16,
+      "5_3_#default#": 0.18,
+      "9_12_#default#": 0.41
+    },
+    "paper": {
+      "dimensions": {
+        "height": 2765,
+        "width": 2220,
+        "x": 450,
+        "y": 50
+      }
+    }
+  }
