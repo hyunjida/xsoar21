@@ -1,0 +1,444 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.1.25
+    packID: PANOSPolicyOptimizer
+    packName: PAN-OS Policy Optimizer (beta)
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: This playbook edits rules with unused applications or rules that are
+  port based, and adds an application to the rule. It is used in PAN-OS - Policy Optimizer
+  playbooks and includes communication tasks to get a rule name and the application
+  to edit from the user.
+id: Policy Optimizer - Add Applications to Policy Rules
+inputs:
+- description: List of PAN-OS rules to edit using the playbook.
+  key: rules_list
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Policy Optimizer - Add Applications to Policy Rules
+outputs:
+- contextPath: RulesToEdit
+  description: Policy rules to edit using the playbook.
+  type: string
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 8d6f588b-6b8a-464b-86ea-89326cb82551
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: 8d6f588b-6b8a-464b-86ea-89326cb82551
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 380,
+          "y": 40
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "2"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      brandname:
+        simple: Panorama
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns 'yes' if an integration brand is available.
+      id: 89802fb0-3469-4200-80c4-a7878ff07d80
+      iscommand: false
+      name: Is PAN-OS integration available?
+      script: IsIntegrationAvailable
+      type: condition
+      version: -1
+    taskid: 89802fb0-3469-4200-80c4-a7878ff07d80
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 380,
+          "y": 180
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    form:
+      description: Choose an application to add to the rule.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Would you like to automatically update any of the following policy
+            rules with new applications?
+        options: []
+        optionsarg:
+        - complex:
+            filters:
+            - - left:
+                  iscontext: true
+                  value:
+                    simple: inputs.rules_list
+                operator: notIn
+                right:
+                  iscontext: true
+                  value:
+                    simple: Updated.Rules
+            root: inputs.rules_list
+        - simple: "No"
+        placeholder: ""
+        readonly: false
+        required: true
+        tooltip: You can choose more than one rule to update at any time, but only
+          one application to apply to these rules. To change the application, choose
+          a different rule in the next playbook run (loop).
+        type: multiSelect
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "1"
+        label: ""
+        labelarg:
+          simple: Choose application to add to the rule.
+        options: []
+        optionsarg: []
+        placeholder: ""
+        readonly: false
+        required: false
+        tooltip: Choose an application to add to the rule. The new application replaces
+          the current application in the rule configuration.
+        type: shortText
+      sender: ""
+      title: Add applications to policy rules
+      totalanswers: 0
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: Choose a policy rule and an application to add to the rule
+      cc: null
+      format: ""
+      methods: []
+      subject: null
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to: null
+    nexttasks:
+      '#none#':
+      - "3"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Choose an application to add to the policy rule.
+      id: bdf48002-95ff-49f1-8ad3-f525b6366c5b
+      iscommand: false
+      name: Choose app to add to the rule
+      type: collection
+      version: -1
+    taskid: bdf48002-95ff-49f1-8ad3-f525b6366c5b
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 680,
+          "y": 350
+        }
+      }
+  "3":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: "0"
+                root: Add applications to policy rules.Answers
+                transformers:
+                - operator: toLowerCase
+          operator: notContainsGeneral
+          right:
+            value:
+              simple: "no"
+      label: "yes"
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "7"
+      "yes":
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Should XSOAR update the rules automatically?
+      id: 22187f91-6d93-4703-89ff-d97d39c5a182
+      iscommand: false
+      name: Update rules automatically?
+      type: condition
+      version: -1
+    taskid: 22187f91-6d93-4703-89ff-d97d39c5a182
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 680,
+          "y": 520
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      element_to_change:
+        simple: application
+      element_value:
+        complex:
+          accessor: "1"
+          root: Add applications to policy rules.Answers
+      rulename:
+        complex:
+          accessor: "0"
+          root: Add applications to policy rules.Answers
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Edits a policy rule.
+      id: 7c5a510f-54df-4a13-8ec9-0e78ad26a73d
+      iscommand: true
+      name: PAN-OS - Edit rule
+      script: '|||pan-os-edit-rule'
+      type: regular
+      version: -1
+    taskid: 7c5a510f-54df-4a13-8ec9-0e78ad26a73d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 690
+        }
+      }
+  "5":
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 72017fda-f521-4ac6-8ee5-c97fad5da2b0
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 72017fda-f521-4ac6-8ee5-c97fad5da2b0
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 380,
+          "y": 1210
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      all:
+        simple: "no"
+      key:
+        complex:
+          root: Add applications to policy rules
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Delete the rules information from context.
+      id: c3c5e787-0891-4ecd-8417-5774f648adc3
+      iscommand: false
+      name: Delete rules information from context
+      script: DeleteContext
+      type: regular
+      version: -1
+    taskid: c3c5e787-0891-4ecd-8417-5774f648adc3
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1035
+        }
+      }
+  "7":
+    continueonerrortype: ""
+    id: "7"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "false"
+      key:
+        simple: RulesToEdit
+      value:
+        simple: "No"
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Set "No rules to update" to the context.
+      id: 80c25bf6-2cee-440b-8bb5-239f4ec2fd51
+      iscommand: false
+      name: Set no rules to context
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: 80c25bf6-2cee-440b-8bb5-239f4ec2fd51
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 380,
+          "y": 690
+        }
+      }
+  "8":
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "6"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      append:
+        simple: "true"
+      key:
+        simple: Updated.Rules
+      value:
+        complex:
+          accessor: "0"
+          root: Add applications to policy rules.Answers
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Save the details of the handled rule to the context.
+      id: dbf138df-2cb5-49c1-8e19-8b751831bedc
+      iscommand: false
+      name: Save handled rule
+      script: SetAndHandleEmpty
+      type: regular
+      version: -1
+    taskid: dbf138df-2cb5-49c1-8e19-8b751831bedc
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 865
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1235,
+        "width": 910,
+        "x": 380,
+        "y": 40
+      }
+    }
+  }
