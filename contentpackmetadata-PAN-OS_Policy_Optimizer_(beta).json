@@ -1,0 +1,238 @@
+{
+	"author": "Maciej Drobniuch and Cortex XSOAR",
+	"authorImage": "",
+	"beta": false,
+	"cacheVersn": 0,
+	"categories": [
+		"Network Security"
+	],
+	"certification": "",
+	"contentItemTypes": [
+		"integration",
+		"automation",
+		"incidentfield",
+		"incidenttype",
+		"playbook",
+		"layoutscontainer"
+	],
+	"contentItems": {
+		"automation": [
+			{
+				"description": "Entry widget that returns the number of unused rules found by PAN-OS policy. optimizer.",
+				"name": "EntryWidgetUnusedRules",
+				"tags": [
+					"dynamic-section"
+				]
+			},
+			{
+				"description": "Entry widget that returns the number of rules with unused applications found by PAN-OS policy optimizer.",
+				"name": "EntryWidgetUnusedApplications",
+				"tags": [
+					"dynamic-section"
+				]
+			},
+			{
+				"description": "Entry widget that returns the number of port based rules found by PAN-OS policy optimizer.",
+				"name": "EntryWidgetPortBasedRules",
+				"tags": [
+					"dynamic-section"
+				]
+			}
+		],
+		"classifier": null,
+		"dashboard": null,
+		"genericfield": null,
+		"generictype": null,
+		"incidentfield": [
+			{
+				"description": "Port based firewall rules found by PAN-OS Policy Optimizer.",
+				"name": "PAN-OS Port Based Rules",
+				"type": "markdown"
+			},
+			{
+				"description": "Unused firewall rules found by PAN-OS Policy Optimizer.",
+				"name": "PAN-OS Unused Rules",
+				"type": "markdown"
+			},
+			{
+				"description": "Policy Optimizer use-case that will be handled by the Policy Optimizer playbook.",
+				"name": "Policy Optimizer Use-Case",
+				"type": "multiSelect"
+			},
+			{
+				"description": "PAN-OS firewall rules with unused applications found by PAN-OS Policy Optimizer.",
+				"name": "PAN-OS Rules with Unused Applications",
+				"type": "markdown"
+			}
+		],
+		"incidenttype": [
+			{
+				"closureScript": "",
+				"days": 0,
+				"hours": 0,
+				"name": "Policy Optimizer",
+				"playbook": "Policy Optimizer - Generic",
+				"weeks": 0
+			}
+		],
+		"indicatorfield": null,
+		"integration": [
+			{
+				"category": "Network Security",
+				"commands": [
+					{
+						"description": "Gets unused, used, or any rules.",
+						"name": "pan-os-po-get-rules"
+					},
+					{
+						"description": "Gets the unused apps.",
+						"name": "pan-os-po-unused-apps"
+					},
+					{
+						"description": "Gets a specific dynamic address group.",
+						"name": "pan-os-get-dag"
+					},
+					{
+						"description": "Shows all security policies with no apps specified.",
+						"name": "pan-os-po-no-apps"
+					},
+					{
+						"description": "Gets the Policy Optimizer statistics.",
+						"name": "pan-os-po-get-stats"
+					},
+					{
+						"description": "Gets the app usage statistics for a specific security rule.",
+						"name": "pan-os-po-app-and-usage"
+					}
+				],
+				"description": "Automate your AppID Adoption by using this integration together with your Palo Alto Networks Next-Generation Firewall or Panorama.",
+				"id": "PAN-OS Policy Optimizer",
+				"name": "PAN-OS Policy Optimizer (Beta) (Community Contribution)"
+			}
+		],
+		"layoutscontainer": [
+			{
+				"description": "",
+				"name": "Policy Optimizer Layout"
+			}
+		],
+		"list": null,
+		"playbook": [
+			{
+				"description": "This playbook helps identify and remove unused rules that do not pass traffic in your environment.",
+				"name": "Policy Optimizer - Manage Unused Rules"
+			},
+			{
+				"description": "This playbook edits rules with unused applications or rules that are port based, and adds an application to the rule. It is used in PAN-OS - Policy Optimizer playbooks and includes communication tasks to get a rule name and the application to edit from the user.",
+				"name": "Policy Optimizer - Add Applications to Policy Rules"
+			},
+			{
+				"description": "This playbook is triggered by the Policy Optimizer incident type, and can execute any of the following sub-playbooks:\n- Policy Optimizer - Manage Unused Rules\n- Policy Optimizer - Manage Rules with Unused Applications\n- Policy Optimizer - Manage Port Based Rules",
+				"name": "Policy Optimizer - Generic"
+			},
+			{
+				"description": "This playbook helps identify and remove unused applications from security policy rules. If you have application-based security policy rules that allow a large number of applications, you can remove unused applications (applications never seen on the rules) from those rules to allow only applications actually seen in the rule’s traffic. This strengthens your security posture by reducing the attack surface.\n",
+				"name": "Policy Optimizer - Manage Rules with Unused Applications"
+			},
+			{
+				"description": "This playbook migrates port-based rules to application-based allow rules to reduce the attack surface and safely enable applications on your network.\n",
+				"name": "Policy Optimizer - Manage Port Based Rules"
+			}
+		],
+		"report": null,
+		"reputation": null,
+		"widget": null,
+		"wizard": null
+	},
+	"currentVersion": "1.1.25",
+	"definitionId": "",
+	"dependencies": {
+		"Base": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.33.49",
+			"name": "Base"
+		},
+		"CommonScripts": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "1.14.26",
+			"name": "Common Scripts"
+		},
+		"CommonTypes": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "3.4.8",
+			"name": "Common Types"
+		},
+		"PAN-OS": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": true,
+			"minVersion": "2.1.24",
+			"name": "PAN-OS by Palo Alto Networks"
+		},
+		"Phishing": {
+			"author": "Cortex XSOAR",
+			"certification": "certified",
+			"mandatory": false,
+			"minVersion": "3.6.17",
+			"name": "Phishing"
+		}
+	},
+	"deprecated": false,
+	"description": "This integration introduces Policy Optimizer and DAG features that are not available through the regular PAN API",
+	"disabledMonthly": false,
+	"downloads": 1691,
+	"eulaLink": "https://github.com/demisto/content/blob/master/LICENSE",
+	"fromServerVersion": "6.0.0",
+	"general": [
+		"generalFieldFree"
+	],
+	"id": "PANOSPolicyOptimizer",
+	"installMessage": "",
+	"integrations": [
+		{
+			"imagePath": "content/packs/PANOSPolicyOptimizer/PAN-OSPolicyOptimizer_image.png",
+			"name": "PAN-OS Policy Optimizer (Beta)"
+		},
+		{
+			"imagePath": "content/packs/PAN-OS/Panorama_image.png",
+			"name": "Palo Alto Networks PAN-OS"
+		}
+	],
+	"itemVersion": "1.1.25",
+	"keywords": [],
+	"legacy": true,
+	"name": "PAN-OS Policy Optimizer (beta)",
+	"packID": "PANOSPolicyOptimizer",
+	"packName": "",
+	"premium": false,
+	"previewOnly": false,
+	"price": 0,
+	"propagationLabels": [
+		"all"
+	],
+	"rawKeywords": null,
+	"rawTags": null,
+	"rawUseCases": null,
+	"readme": "Automate your AppID Adoption by using the PAN-OS Policy Optimizer (beta) integration and playbooks together with your Palo Alto Networks Next-Generation Firewall or Panorama.\n\n\n## What Does This Pack Do?\nThe Policy Optimizer integration in this content pack enables you to gain visibility into and control usage of security policy rules.\n\nThe playbooks in this pack also help you automate the following procedures to reduce the attack surface and safely enable applications on your network.\n\n- Identify unused rules.\n- Identify port-based rules so you can convert them to application-based rules that allow traffic or add applications to existing rules without compromising application availability.\n- Identify rules configured with unused applications.\n- Analyze rule characteristics and prioritize which rules to migrate or clean up.\n\nAs part of this pack, you also get out-of-the-box Policy Optimizer incident views, a full layout, and automation scripts. All of these are easily customizable to suit the needs of your organization.\n\n_For more information, visit our [PAN-OS Policy Optimizer docs page](https://xsoar.pan.dev/docs/reference/packs/policy-optimizer)._\n\n![Policy_Optimizer_-_Manage_Unused_Rules](https://github.com/demisto/content/raw/82df056cff9dc4ce8b0753b341a4434593fa4608/Packs/PANOSPolicyOptimizer/doc_files/Policy_Optimizer_-_Manage_Unused_Rules.png?raw=true)\n\n### Pack Contributors:\n\n---\n - Maciej Drobniuch\n\nContributions are welcome and appreciated. For more info, visit our [Contribution Guide](https://xsoar.pan.dev/docs/contributing/contributing).",
+	"searchRank": 0,
+	"serverMaxVersion": "",
+	"serverMinVersion": "6.0.0",
+	"support": "community",
+	"supportDetails": {
+		"email": "",
+		"url": "https://www.paloaltonetworks.com/cortex"
+	},
+	"tags": [],
+	"toServerVersion": "",
+	"updated": "2024-04-07T18:31:25+09:00",
+	"useCases": [],
+	"version": -1,
+	"versionInfo": "938811",
+	"videos": []
+}
