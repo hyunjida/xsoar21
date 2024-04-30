@@ -1,0 +1,1145 @@
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.1.25
+    packID: PANOSPolicyOptimizer
+    packName: PAN-OS Policy Optimizer (beta)
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: |
+  This playbook migrates port-based rules to application-based allow rules to reduce the attack surface and safely enable applications on your network.
+id: Policy Optimizer - Manage Port Based Rules
+inputs:
+- description: Slack user to notify about port based rules.
+  key: slack_user
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: User email address to notify about port based rules.
+  key: email_address
+  playbookInputQuery: null
+  required: false
+  value: {}
+- description: Specifies whether you want to auto-commit the configuration for the
+    PAN-OS policy changes automatically (Yes/No).
+  key: auto_commit
+  playbookInputQuery: null
+  required: false
+  value: {}
+name: Policy Optimizer - Manage Port Based Rules
+outputs: []
+starttaskid: "0"
+system: true
+tasks:
+  "0":
+    continueonerrortype: ""
+    id: "0"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "1"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: cd6d5fdb-ca7f-4323-85ae-66efb5e3430f
+      iscommand: false
+      name: ""
+      version: -1
+    taskid: cd6d5fdb-ca7f-4323-85ae-66efb5e3430f
+    timertriggers: []
+    type: start
+    view: |-
+      {
+        "position": {
+          "x": 370,
+          "y": 20
+        }
+      }
+  "1":
+    continueonerrortype: ""
+    id: "1"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "3"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      brandname:
+        simple: PAN-OS Policy Optimizer
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns 'yes' if integration brand is available.
+      id: abfb17cc-7229-4476-820d-1ea1c91ada64
+      iscommand: false
+      name: Is PAN-OS Policy Optimizer integration available?
+      script: IsIntegrationAvailable
+      type: condition
+      version: -1
+    taskid: abfb17cc-7229-4476-820d-1ea1c91ada64
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 370,
+          "y": 170
+        }
+      }
+  "2":
+    continueonerrortype: ""
+    id: "2"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 54d28a35-d48d-443b-8967-66b5fe64e7d3
+      iscommand: false
+      name: Done
+      type: title
+      version: -1
+    taskid: 54d28a35-d48d-443b-8967-66b5fe64e7d3
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 370,
+          "y": 2630
+        }
+      }
+  "3":
+    continueonerrortype: ""
+    id: "3"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "4"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 44ec1599-5027-4892-837c-fd4a51f82edb
+      iscommand: false
+      name: Manage Port Based Rules
+      type: title
+      version: -1
+    taskid: 44ec1599-5027-4892-837c-fd4a51f82edb
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 890,
+          "y": 340
+        }
+      }
+  "4":
+    continueonerrortype: ""
+    fieldMapping:
+    - incidentfield: PAN-OS Port Based Rules
+      output:
+        complex:
+          accessor: NoApps
+          root: PanOS.PolicyOptimizer
+          transformers:
+          - args:
+              headers:
+                value:
+                  simple: "@name,@uuid\t,description,action,application,apps-allowed-count,apps-seen-count,source,source-user,service,destination,to,disabled,hit-count,from,last-app-seen-since-count,last-hit-timestamp,rule-creation-timestamp,rule-modification-timestamp"
+              title: {}
+            operator: JsonToTable
+    id: "4"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "5"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Shows all security policies with no apps specified.
+      id: 76b8c3fd-b391-449c-8de5-447999415589
+      iscommand: true
+      name: PAN-OS - Get policies with no apps
+      script: '|||pan-os-po-no-apps'
+      type: regular
+      version: -1
+    taskid: 76b8c3fd-b391-449c-8de5-447999415589
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 890,
+          "y": 470
+        }
+      }
+  "5":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: NoApps
+                root: PanOS.PolicyOptimizer
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "5"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "6"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Are there any policies with no applications?
+      id: 2bd0d222-f633-480f-8fc3-85febbeab4a3
+      iscommand: false
+      name: Are there any policies with no apps?
+      type: condition
+      version: -1
+    taskid: 2bd0d222-f633-480f-8fc3-85febbeab4a3
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 890,
+          "y": 650
+        }
+      }
+  "6":
+    continueonerrortype: ""
+    id: "6"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "8"
+      - "9"
+      - "29"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: c243ca73-fcc9-4703-8c08-966d512dac91
+      iscommand: false
+      name: Notify
+      type: title
+      version: -1
+    taskid: c243ca73-fcc9-4703-8c08-966d512dac91
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1390,
+          "y": 820
+        }
+      }
+  "8":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.email_address
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "8"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "10"
+      "yes":
+      - "11"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Is there an email address input configured?
+      id: 2c28b017-a56f-4fa7-8c76-b5bb1d157912
+      iscommand: false
+      name: Is there an email address?
+      type: condition
+      version: -1
+    taskid: 2c28b017-a56f-4fa7-8c76-b5bb1d157912
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 960,
+          "y": 960
+        }
+      }
+  "9":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.slack_user
+          operator: isNotEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "9"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "10"
+      "yes":
+      - "12"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Is there a slack user input configured?
+      id: d055a0ae-8e0a-48c5-8e37-9598b7715782
+      iscommand: false
+      name: Is there a slack user?
+      type: condition
+      version: -1
+    taskid: d055a0ae-8e0a-48c5-8e37-9598b7715782
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1390,
+          "y": 960
+        }
+      }
+  "10":
+    continueonerrortype: ""
+    id: "10"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "18"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 50080dee-1af8-4285-8c36-ced8ef3ee67f
+      iscommand: false
+      name: Take action
+      type: title
+      version: -1
+    taskid: 50080dee-1af8-4285-8c36-ced8ef3ee67f
+    timertriggers: []
+    type: title
+    view: |-
+      {
+        "position": {
+          "x": 1190,
+          "y": 1300
+        }
+      }
+  "11":
+    continueonerrortype: ""
+    form:
+      description: PAN-OS Policy Optimizer has discovered port based rules in your
+        environment. Migrate port-based rules to application-based allow rules to
+        reduce the attack surface and safely enable applications on your network.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Please choose the action for the playbook to continue
+        options: []
+        optionsarg:
+        - simple: Edit rule
+        - simple: Delete rule
+        - simple: Manual action
+        placeholder: ""
+        readonly: false
+        required: true
+        tooltip: ""
+        type: singleSelect
+      sender: ""
+      title: Port Based Rules
+      totalanswers: 0
+    id: "11"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body: {}
+      cc: null
+      format: ""
+      methods:
+      - email
+      subject:
+        simple: 'PAN-OS Policy Optimizer has discovered port based rules in your environment. '
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to:
+        complex:
+          root: inputs.email_address
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      subject:
+        simple: PAN-OS Policy Optimizer has discovered port based rules in your environment.
+      to:
+        complex:
+          root: inputs.email_address
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Sends an email using Gmail.
+      id: 39f86c44-67dc-4f8d-8ca6-054bc98fad9c
+      iscommand: false
+      name: Send mail
+      type: collection
+      version: -1
+    taskid: 39f86c44-67dc-4f8d-8ca6-054bc98fad9c
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 770,
+          "y": 1130
+        }
+      }
+  "12":
+    continueonerrortype: ""
+    form:
+      description: PAN-OS Policy Optimizer has discovered port based rules in your
+        environment. Migrate port-based rules to application-based allow rules to
+        reduce the attack surface and safely enable applications on your network.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Please choose the action for the playbook to continue.
+        options: []
+        optionsarg:
+        - simple: Edit rule
+        - simple: Delete rule
+        - simple: Manual action
+        placeholder: ""
+        readonly: false
+        required: true
+        tooltip: ""
+        type: singleSelect
+      sender: ""
+      title: Port Based Rules
+      totalanswers: 0
+    id: "12"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: PAN-OS Policy Optimizer has discovered port based rules in your environment.
+      cc: null
+      format: ""
+      methods:
+      - SlackV2
+      subject: null
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to:
+        complex:
+          root: inputs.slack_user
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      message:
+        simple: 'PAN-OS Policy Optimizer has discovered port based rules in your environment. '
+      to:
+        complex:
+          root: inputs.slack_user
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Sends a message to a user, group, or channel.
+      id: f4c545c0-ef13-410e-865d-4b6a166a3a06
+      iscommand: false
+      name: Send slack message
+      type: collection
+      version: -1
+    taskid: f4c545c0-ef13-410e-865d-4b6a166a3a06
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 1620,
+          "y": 1130
+        }
+      }
+  "13":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: "0"
+                root: Port Based Rules.Answers
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: edit rule
+      label: Edit rule
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                accessor: "0"
+                root: Port Based Rules.Answers
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: delete rule
+      label: Delete rule
+    continueonerrortype: ""
+    id: "13"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "16"
+      Delete rule:
+      - "28"
+      Edit rule:
+      - "27"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Choose an action for the playbook
+      id: b5d7e682-87e7-43bc-86f5-4f4a88323d15
+      iscommand: false
+      name: Choose action to take
+      type: condition
+      version: -1
+    taskid: b5d7e682-87e7-43bc-86f5-4f4a88323d15
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1530,
+          "y": 1600
+        }
+      }
+  "14":
+    continueonerrortype: ""
+    id: "14"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "23"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      rulename:
+        complex:
+          accessor: "0"
+          root: Port based policy rules to delete.Answers
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Deletes a policy rule.
+      id: cbdb7aa6-09e0-4c1b-8a07-f84bd528955d
+      iscommand: true
+      name: PAN-OS - Delete Rule
+      script: '|||pan-os-delete-rule'
+      type: regular
+      version: -1
+    taskid: cbdb7aa6-09e0-4c1b-8a07-f84bd528955d
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 1270,
+          "y": 1950
+        }
+      }
+  "16":
+    continueonerrortype: ""
+    id: "16"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manually handle the port based rules since the user didn't choose
+        automatic remediation.
+      id: 55767f1f-c339-4de2-895a-53ccb41690aa
+      iscommand: false
+      name: Manually handle port based rules
+      type: regular
+      version: -1
+    taskid: 55767f1f-c339-4de2-895a-53ccb41690aa
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 690,
+          "y": 1770
+        }
+      }
+  "18":
+    continueonerrortype: ""
+    id: "18"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "16"
+      "yes":
+      - "13"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      brandname:
+        simple: Panorama
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Returns 'yes' if integration brand is available.
+      id: 9b1c4aec-8a27-4229-8516-4215627511a8
+      iscommand: false
+      name: Is PAN-OS integration available?
+      script: IsIntegrationAvailable
+      type: condition
+      version: -1
+    taskid: 9b1c4aec-8a27-4229-8516-4215627511a8
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1190,
+          "y": 1430
+        }
+      }
+  "23":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.auto_commit
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: "yes"
+      label: "yes"
+    continueonerrortype: ""
+    id: "23"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "25"
+      "yes":
+      - "24"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Is the auto-commit configuration input enabled?
+      id: 2eae5616-fd92-4eb9-819d-2e73eaf78ac2
+      iscommand: false
+      name: Auto-commit configuration input enabled?
+      type: condition
+      version: -1
+    taskid: 2eae5616-fd92-4eb9-819d-2e73eaf78ac2
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1270,
+          "y": 2120
+        }
+      }
+  "24":
+    continueonerrortype: ""
+    id: "24"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      id: 6c609021-5e83-4ac7-8253-dabeedaf5237
+      iscommand: false
+      name: PAN-OS Commit Configuration
+      playbookId: PAN-OS Commit Configuration
+      type: playbook
+      version: -1
+    taskid: 6c609021-5e83-4ac7-8253-dabeedaf5237
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1460,
+          "y": 2460
+        }
+      }
+  "25":
+    continueonerrortype: ""
+    id: "25"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "26"
+      "Yes":
+      - "24"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Should the playbook automatically commit the enabled configuration
+        input?
+      id: 37317367-3088-4665-887d-44744f4a1e79
+      iscommand: false
+      name: Automatically commit PAN-OS configuration?
+      type: condition
+      version: -1
+    taskid: 37317367-3088-4665-887d-44744f4a1e79
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1060,
+          "y": 2290
+        }
+      }
+  "26":
+    continueonerrortype: ""
+    id: "26"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#none#':
+      - "2"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Manually commit the PAN-OS configuration.
+      id: cd15a0b0-e16b-454c-8fa6-1b17d3c31190
+      iscommand: false
+      name: Manually commit PAN-OS configuration
+      type: regular
+      version: -1
+    taskid: cd15a0b0-e16b-454c-8fa6-1b17d3c31190
+    timertriggers: []
+    type: regular
+    view: |-
+      {
+        "position": {
+          "x": 920,
+          "y": 2460
+        }
+      }
+  "27":
+    continueonerrortype: ""
+    id: "27"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    loop:
+      builtincondition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: RulesToEdit
+                transformers:
+                - operator: toLowerCase
+          operator: isEqualString
+          right:
+            value:
+              simple: "no"
+      exitCondition: ""
+      iscommand: false
+      max: 100
+      wait: 1
+    nexttasks:
+      '#none#':
+      - "23"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      rules_list:
+        complex:
+          accessor: '@name'
+          root: PanOS.PolicyOptimizer.NoApps
+    separatecontext: true
+    skipunavailable: false
+    task:
+      brand: ""
+      description: This playbook edits rules with unused applications or rules that
+        are port based, and adds an application to the rule. It includes communication
+        tasks to get a rule name and the application to edit from the user.
+      id: 661ef218-b0b2-4ab0-81d4-a62f5beb196d
+      iscommand: false
+      name: Policy Optimizer - Add Applications to Policy Rules
+      playbookId: Policy Optimizer - Add Applications to Policy Rules
+      type: playbook
+      version: -1
+    taskid: 661ef218-b0b2-4ab0-81d4-a62f5beb196d
+    timertriggers: []
+    type: playbook
+    view: |-
+      {
+        "position": {
+          "x": 1860,
+          "y": 1770
+        }
+      }
+  "28":
+    continueonerrortype: ""
+    form:
+      description: Choose the policy rules to be deleted by the PAN-OS integration.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Port based policy rules to delete
+        options: []
+        optionsarg:
+        - complex:
+            accessor: '@name'
+            root: PanOS.PolicyOptimizer.NoApps
+        placeholder: ""
+        readonly: false
+        required: true
+        tooltip: Choose the policy rules to be deleted by the PAN-OS integration.
+        type: multiSelect
+      sender: ""
+      title: Port based policy rules to delete
+      totalanswers: 0
+    id: "28"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: Choose policy rules to delete
+      cc: null
+      format: ""
+      methods: []
+      subject: null
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to: null
+    nexttasks:
+      '#none#':
+      - "14"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Choose policy rules to be deleted by the playbook.
+      id: a57564d7-6407-4b7a-8cc7-88cd817b6011
+      iscommand: false
+      name: Choose rules to delete
+      type: collection
+      version: -1
+    taskid: a57564d7-6407-4b7a-8cc7-88cd817b6011
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 1270,
+          "y": 1770
+        }
+      }
+  "29":
+    conditions:
+    - condition:
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.slack_user
+          operator: isEmpty
+      - - left:
+            iscontext: true
+            value:
+              complex:
+                root: inputs.email_address
+          operator: isEmpty
+      label: "yes"
+    continueonerrortype: ""
+    id: "29"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    nexttasks:
+      '#default#':
+      - "10"
+      "yes":
+      - "30"
+    note: false
+    quietmode: 0
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: No communication input configured?
+      id: f156ebf6-3038-440c-8729-db4d984b8c69
+      iscommand: false
+      name: No communication input configured?
+      type: condition
+      version: -1
+    taskid: f156ebf6-3038-440c-8729-db4d984b8c69
+    timertriggers: []
+    type: condition
+    view: |-
+      {
+        "position": {
+          "x": 1990,
+          "y": 960
+        }
+      }
+  "30":
+    continueonerrortype: ""
+    form:
+      description: PAN-OS Policy Optimizer has discovered port based rules in your
+        environment. Migrate port-based rules to application-based allow rules to
+        reduce the attack surface and safely enable applications on your network.
+      expired: false
+      questions:
+      - defaultrows: []
+        fieldassociated: ""
+        gridcolumns: []
+        id: "0"
+        label: ""
+        labelarg:
+          simple: Please choose the action for the playbook to continue.
+        options: []
+        optionsarg:
+        - simple: Edit rule
+        - simple: Delete rule
+        - simple: Manual action
+        placeholder: ""
+        readonly: false
+        required: true
+        tooltip: ""
+        type: singleSelect
+      sender: ""
+      title: Port Based Rules
+      totalanswers: 0
+    id: "30"
+    ignoreworker: false
+    isautoswitchedtoquietmode: false
+    isoversize: false
+    message:
+      bcc: null
+      body:
+        simple: PAN-OS Policy Optimizer has discovered port based rules in your environment.
+      cc: null
+      format: ""
+      methods: []
+      subject: null
+      timings:
+        completeafterreplies: 1
+        completeaftersla: false
+        completeafterv2: false
+        retriescount: 2
+        retriesinterval: 360
+      to:
+        complex:
+          root: inputs.slack_user
+    nexttasks:
+      '#none#':
+      - "10"
+    note: false
+    quietmode: 0
+    scriptarguments:
+      message:
+        simple: 'PAN-OS Policy Optimizer has discovered port based rules in your environment. '
+      to:
+        complex:
+          root: inputs.slack_user
+    separatecontext: false
+    skipunavailable: false
+    task:
+      brand: ""
+      description: Ask the user what action they want to take by a collection task.
+      id: f1826f22-a400-408e-8b6f-982b6b1bf6d2
+      iscommand: false
+      name: Ask by task only
+      type: collection
+      version: -1
+    taskid: f1826f22-a400-408e-8b6f-982b6b1bf6d2
+    timertriggers: []
+    type: collection
+    view: |-
+      {
+        "position": {
+          "x": 2180,
+          "y": 1130
+        }
+      }
+version: -1
+view: |-
+  {
+    "linkLabelsPosition": {
+      "18_16_#default#": 0.29,
+      "19_2_#default#": 0.16,
+      "1_2_#default#": 0.35,
+      "23_24_yes": 0.44,
+      "25_24_Yes": 0.47,
+      "5_2_#default#": 0.21,
+      "8_10_#default#": 0.46,
+      "9_10_#default#": 0.43
+    },
+    "paper": {
+      "dimensions": {
+        "height": 2675,
+        "width": 2190,
+        "x": 370,
+        "y": 20
+      }
+    }
+  }
