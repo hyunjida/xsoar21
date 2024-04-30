@@ -1,0 +1,868 @@
+beta: true
+category: Network Security
+commonfields:
+  id: PAN-OS Policy Optimizer
+  version: -1
+configuration:
+- display: Server URL (e.g., https://192.168.0.1:443)
+  name: server_url
+  required: true
+  type: 0
+- display: Username
+  name: credentials
+  required: true
+  type: 9
+- display: Vsys - Firewall instances only
+  name: vsys
+  required: false
+  type: 0
+- display: Device Group - Panorama instances only
+  name: device_group
+  required: false
+  type: 0
+- defaultvalue: "8"
+  display: PAN-OS Version (The exact version, e.g., 10.1.4, 1.1, 9)
+  name: version
+  required: false
+  type: 0
+- display: Trust any certificate (not secure)
+  name: insecure
+  required: false
+  type: 8
+- display: Use system proxy settings
+  name: proxy
+  required: false
+  type: 8
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.1.25
+    packID: PANOSPolicyOptimizer
+    packName: PAN-OS Policy Optimizer (beta)
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+description: Automate your AppID Adoption by using this integration together with
+  your Palo Alto Networks Next-Generation Firewall or Panorama.
+detaileddescription: "### Community Contributed Integration\n #### Integration Author:
+  Maciej Drobniuch and Cortex XSOAR\n No support or maintenance is provided by the
+  author. Customers are encouraged to engage with the user community for questions
+  and guidance at the [Cortex XSOAR Live Discussions](https://live.paloaltonetworks.com/t5/cortex-xsoar-discussions/bd-p/Cortex_XSOAR_Discussions).\n***\nThe
+  integration uses User Interface calls to manage the PANOS Policy Optimizer for AppID
+  Adoption.\n\nYou now have a simple way to gain visibility into, control usage of,
+  and safely enable applications in Security policy rules: Policy Optimizer. \n\nThis
+  new feature identifies port-based rules so you can convert them to application-based
+  rules that allow the traffic or add applications to existing rules without compromising
+  application availability. It also identifies rules configured with unused applications.
+  Policy Optimizer information helps you analyze rule characteristics and prioritize
+  which rules to migrate or clean up first.\nConverting port-based rules to application-based
+  rules enables you to include the applications you want to allow in an allow list
+  and deny access to all other applications, which improves your security posture.
+  Restricting application traffic to its default ports prevents evasive applications
+  from running on non-standard ports. Removing unused applications from rules is a
+  best practice that reduces the attack surface and keeps the rulebase clean.\nYou
+  can use this new feature on:\n* Firewalls that run PAN-OS version 9.0 and have App-ID
+  enabled.\n* Panorama running PAN-OS version 9.0. You don’t have to upgrade firewalls
+  that Panorama manages to use the Policy Optimizer capabilities. However, to use
+  these capabilities, managed firewalls must run PAN-OS 8.1 or later. If managed firewalls
+  connect to Log Collectors, those Log Collectors must also run PAN-OS version 9.0.
+  Managed PA-7000 Series firewalls that have a Log Processing Card (LPC) can also
+  run PAN-OS 8.1 (or later).\n\nFor more information, visit the [Palo Alto Networks
+  documentation](https://docs.paloaltonetworks.com/pan-os/10-1/pan-os-admin/app-id/security-policy-rule-optimization).\n\n---\nYou
+  need to create a separate integration instance for Palo Alto Networks Firewall and
+  Palo Alto Networks. Unless specified otherwise, all commands are valid for both
+  Firewall and Panorama.\n\n---\n\nNote: This is a beta Integration, which lets you
+  implement and test pre-release software. Since the integration is beta, it might
+  contain bugs. Updates to the integration during the beta phase might include non-backward
+  compatible features. We appreciate your feedback on the quality and usability of
+  the integration to help us identify issues, fix them, and continually improve.\n\n\n---\n[View
+  Integration Documentation](https://xsoar.pan.dev/docs/reference/integrations/pan-os-policy-optimizer)"
+display: PAN-OS Policy Optimizer (Beta) (Community Contribution)
+image: data:image/png;base64,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
+name: PAN-OS Policy Optimizer
+script:
+  commands:
+  - arguments:
+    - auto: PREDEFINED
+      defaultValue: pre
+      description: Whether to get pre-rules statistics or post-rules statistics. 'pre'
+        for pre rules, 'post' for post-rules. Only for Panorama instances.
+      name: position
+      predefined:
+      - pre
+      - post
+    description: Gets the Policy Optimizer statistics.
+    name: pan-os-po-get-stats
+    outputs:
+    - contextPath: PanOS.PolicyOptimizer.Stats.no_app_specified
+      description: Number of rules with no apps specified.
+      type: Number
+    - contextPath: PanOS.PolicyOptimizer.Stats.unused
+      description: Number of unused security policies.
+      type: Number
+    - contextPath: PanOS.PolicyOptimizer.Stats.unused_apps
+      description: Number of unused apps in security policies.
+      type: Number
+    - contextPath: PanOS.PolicyOptimizer.Stats.unused_in_30_days
+      description: Number of unused security policies in 30 days.
+      type: Number
+    - contextPath: PanOS.PolicyOptimizer.Stats.unused_in_90_days
+      description: Number of unused security policies in 90 days.
+      type: Number
+  - arguments:
+    - auto: PREDEFINED
+      defaultValue: pre
+      description: Whether to get pre-rules with no apps or post-rules with no apps.
+        'pre' for pre rules, 'post' for post-rules. Only for Panorama instances.
+      name: position
+      predefined:
+      - pre
+      - post
+    description: Shows all security policies with no apps specified.
+    name: pan-os-po-no-apps
+    outputs:
+    - contextPath: PanOS.PolicyOptimizer.NoApps
+      description: Contains information about the rules that have no apps specified.
+        For example, Source and Destination.
+      type: Unknown
+  - arguments:
+    - auto: PREDEFINED
+      defaultValue: pre
+      description: Whether to get pre-rules unused apps or post-rules unused apps.
+        'pre' for pre rules, 'post' for post-rules. Only for Panorama instances.
+      name: position
+      predefined:
+      - pre
+      - post
+    description: Gets the unused apps.
+    name: pan-os-po-unused-apps
+    outputs:
+    - contextPath: PanOS.PolicyOptimizer.UnusedApps
+      description: Shows all security rules with unused apps.
+      type: String
+  - arguments:
+    - defaultValue: "30"
+      description: The time frame in days to show the unused rules.
+      name: timeframe
+    - auto: PREDEFINED
+      defaultValue: Unused
+      description: Rule usage type to filter by. Can be Unused, Used, or Any.
+      name: usage
+      predefined:
+      - Unused
+      - Used
+      - Any
+    - defaultValue: "false"
+      description: Whether to exclude rules reset during the last x days, where x
+        is the value defined in the timeframe argument. It will not exclude rules
+        by default.
+      name: exclude
+      predefined:
+      - "false"
+      - "true"
+    - auto: PREDEFINED
+      defaultValue: both
+      description: Whether to get pre-rules, post-rules or both. 'pre' for pre rules,
+        'post' for post-rules, only for panorama instances.
+      name: position
+      predefined:
+      - pre
+      - post
+      - both
+    - defaultValue: security
+      description: Which type of rules to query.
+      name: rule_type
+      predefined:
+      - security
+      - nat
+      - qos
+      - pbf
+      - decryption
+      - tunnel-inspect
+      - application-override
+      - authentication
+      - dos
+      - sdwan
+    - defaultValue: "200"
+      description: The maximum number of rules to return.
+      name: limit
+    - defaultValue: "200"
+      description: The amount of items to return in each paginated call. Can only
+        be a value of up to 200.
+      name: page_size
+    - description: A specific pagination page to get items from.
+      name: page
+    description: Gets unused, used, or any rules.
+    name: pan-os-po-get-rules
+    outputs:
+    - contextPath: PanOS.PolicyOptimizer.UnusedRules
+      description: Shows all unused security rules.
+      type: String
+    - contextPath: PanOS.PolicyOptimizer.AnyRules
+      description: Shows all security rules.
+      type: String
+    - contextPath: PanOS.PolicyOptimizer.UsedRules
+      description: Shows all used security rules.
+      type: String
+  - arguments:
+    - description: The UUID of the security rule.
+      name: rule_uuid
+      required: true
+    description: Gets the app usage statistics for a specific security rule.
+    name: pan-os-po-app-and-usage
+    outputs:
+    - contextPath: PanOS.PolicyOptimizer.AppsAndUsage
+      description: Shows detailed app usage statistics for specific security rules.
+      type: Unknown
+  - arguments:
+    - description: Dynamic address group name.
+      name: dag
+      required: true
+    description: Gets a specific dynamic address group.
+    name: pan-os-get-dag
+  dockerimage: demisto/python3:3.10.14.91134
+  runonce: false
+  script: |
+    register_module_line('PAN-OS Policy Optimizer', 'start', __line__())
+    ### pack version: 1.1.25
+    import hashlib
+
+
+
+    CSRF_PARSING_CHARS = 14
+
+
+    class Client:
+        """
+        Client to use in the APN-OS Policy Optimizer integration.
+        """
+
+        def __init__(self, url: str, username: str, password: str, vsys: str, device_group: str,
+                     verify: bool, tid: int, version: str):
+            # The TID is used to track individual commands send to the firewall/Panorama during a PHP session, and
+            # is also used to generate the security token (Data String) that is used to validate each command.
+            # Setting tid as a global variable with an arbitrary value of 50
+            self.session_metadata: Dict[str, Any] = {'panorama': url, 'base_url': url, 'username': username,
+                                                     'password': password, 'tid': tid}
+            if device_group and vsys:
+                raise DemistoException(
+                    'Cannot configure both vsys and Device group. Set vsys for firewall, set Device group for Panorama.')
+            if not device_group and not vsys:
+                raise DemistoException('Set vsys for firewall or Device group for Panorama.')
+
+            if vsys:  # firewall instance
+                self.machine = vsys
+                self.is_cms_selected = False
+            else:
+                self.machine = device_group
+                self.is_cms_selected = True
+            self.verify = verify
+            self.version = version
+            handle_proxy()
+            # Use Session() in order to maintain cookies for persisting the login PHP session cookie
+            self.session = requests.Session()
+
+        def session_post(self, url: str, json_cmd: dict) -> dict:
+            response = self.session.post(url=url, json=json_cmd, verify=self.verify,
+                                         headers=self.session_metadata.get("headers"))
+            json_response = json.loads(response.text)
+            if 'type' in json_response and json_response['type'] == 'exception':
+                if 'message' in json_response:
+                    raise Exception(f'Operation to PAN-OS failed. with: {str(json_response["message"])}')
+                raise Exception(f'Operation to PAN-OS failed. with: {str(json_response)}')
+            return json_response
+
+        @staticmethod
+        def extract_csrf(response_text: str) -> str:
+            # the constant amount of chars until the value we want for the csrf
+            csrf_start = response_text.find('_csrf') + CSRF_PARSING_CHARS
+            csrf_end = response_text.find('"', csrf_start)
+            return response_text[csrf_start:csrf_end]
+
+        def login(self) -> str:  # pragma: no cover
+            # This is the data sent to Panorama from the Login screen to complete the login and get a PHPSESSID cookie
+            login_data = {
+                'prot': 'https:',
+                'server': self.session_metadata['panorama'],
+                'authType': 'init',
+                'challengeCookie': '',
+                'user': self.session_metadata['username'],
+                'passwd': self.session_metadata['password'],
+                'challengePwd': '',
+                'ok': 'Log In'
+            }
+            try:
+                headers = {}
+                if LooseVersion(self.version) >= LooseVersion('10.1.6'):
+                    # We do this to get the cookie we need to add to the requests in the new version of PAN-OS
+                    response = self.session.get(url=f'{self.session_metadata["base_url"]}/php/login.php?',
+                                                verify=self.verify)
+                    csrf = self.extract_csrf(response.text)
+                    login_data['_csrf'] = csrf
+                    self.session_metadata["cookie"] = f'PHPSESSID={response.cookies.get_dict().get("PHPSESSID")}'
+                    headers = {
+                        'Cookie': self.session_metadata["cookie"],
+                    }
+                # Use a POST command to login to Panorama and create an initial session
+                response = self.session.post(url=f'{self.session_metadata["base_url"]}/php/login.php?', data=login_data,
+                                             verify=self.verify, headers=headers)
+                self.session_metadata["cookie"] = f'PHPSESSID={response.cookies.get_dict().get("PHPSESSID")}'
+                headers['Cookie'] = self.session_metadata["cookie"]
+                # Use a GET command to the base URL to get the ServerToken which looks like this:
+                #  window.Pan.st.st.st539091 = "8PR8ML4A67PUMD3NU00L3G67M4958B996F61Q97T"
+                response = self.session.post(url=f'{self.session_metadata["base_url"]}/', verify=self.verify,
+                                             headers=headers)
+            except Exception as err:
+                raise Exception(f'Failed to login. Please double-check the credentials and the server URL. {str(err)}')
+            # Use RegEx to parse the ServerToken string from the JavaScript variable
+            match = re.search(r'(?:window\.Pan\.st\.st\.st[0-9]+\s=\s\")(\w+)(?:\")', response.text)
+            # Fix to login validation for version 9
+            if LooseVersion(self.version) >= LooseVersion('9') and 'window.Pan.staticMOTD' not in response.text:
+                match = None
+            # The JavaScript calls the ServerToken a "cookie" so we will use that variable name
+            # The "data" field is the MD5 calculation of "cookie" + "TID"
+            if not match:
+                raise Exception('Failed to login. Please double-check the credentials and the server URL.')
+            return match.group(1)
+
+        def logout(self):  # pragma: no cover
+            self.session.post(url=f'{self.session_metadata["base_url"]}/php/logout.php?', verify=False)
+
+        def token_generator(self) -> str:
+            """
+            The PHP Security Token (Data String) is generated with the TID (counter) and a special session "cookie"
+            :return: hash token
+            """
+            data_code = f'{self.session_metadata["cookie_key"]}{str(self.session_metadata["tid"])}'
+            # Use the hashlib library function to calculate the MD5, or SHA256 for version 10.2.0 and above
+            if LooseVersion(self.version) >= LooseVersion('10.2.0'):
+                data_hash = hashlib.sha256(data_code.encode())  # nosec
+            else:
+                data_hash = hashlib.md5(data_code.encode())  # nosec
+            data_string = data_hash.hexdigest()  # Convert the hash to a proper hex string
+            return data_string
+
+        def get_policy_optimizer_statistics(self, position: str) -> dict:
+            self.session_metadata['tid'] += 1  # Increment TID
+            json_cmd = {
+                "action": "PanDirect", "method": "run", "data": [
+                    self.token_generator(),
+                    "PoliciesDirect.getRuleCountInRuleUsage",
+                    [{"type": "security", "position": position, "vsysName": self.machine}]
+                ],
+                "type": "rpc", "tid": self.session_metadata['tid']
+            }
+
+            return self.session_post(
+                url=f'{self.session_metadata["base_url"]}/php/utils/router.php/PoliciesDirect.getRuleCountInRuleUsage',
+                json_cmd=json_cmd)
+
+        def policy_optimizer_no_apps(self, position: str) -> dict:
+            isCmsSelected = is_cms_selected(self.version, self.is_cms_selected)
+            self.session_metadata['tid'] += 1  # Increment TID
+            json_cmd = {
+                "action": "PanDirect", "method": "run",
+                "data": [
+                    self.token_generator(),
+                    "PoliciesDirect.getPoliciesByUsage", [
+                        {
+                            "type": "security",
+                            "position": position,
+                            "vsysName": self.machine,
+                            "isCmsSelected": isCmsSelected,
+                            "isMultiVsys": False,
+                            "showGrouped": False,
+                            "usageAttributes": {
+                                "timeframeTag": "30",
+                                "application/member": "any",
+                                "apps-seen-count": "geq \'1\'",
+                                "action": "allow"
+                            },
+                            "pageContext": "app_usage",
+                            "field": "$.bytes",
+                            "direction": "DESC"
+                        }
+                    ]
+                ],
+                "type": "rpc",
+                "tid": self.session_metadata['tid']}
+
+            return self.session_post(
+                url=f'{self.session_metadata["base_url"]}/php/utils/router.php/PoliciesDirect.getPoliciesByUsage',
+                json_cmd=json_cmd)
+
+        def policy_optimizer_get_unused_apps(self, position: str) -> dict:
+            isCmsSelected = is_cms_selected(self.version, self.is_cms_selected)
+            self.session_metadata['tid'] += 1  # Increment TID
+            json_cmd = {
+                "action": "PanDirect", "method": "run",
+                "data": [
+                    self.token_generator(),
+                    "PoliciesDirect.getPoliciesByUsage",
+                    [
+                        {
+                            "type": "security",
+                            "position": position,
+                            "vsysName": self.machine,
+                            "serialNumber": "",
+                            "isCmsSelected": isCmsSelected,
+                            "isMultiVsys": False,
+                            "showGrouped": False,
+                            "usageAttributes": {
+                                "timeframeTag": "30",
+                                "application/member": "unused",
+                                "action": "allow"
+                            },
+                            "pageContext": "app_usage",
+                            "field": "$.bytes",
+                            "direction": "DESC"
+                        }
+                    ]
+                ],
+                "type": "rpc",
+                "tid": self.session_metadata['tid']}
+
+            return self.session_post(
+                url=f'{self.session_metadata["base_url"]}/php/utils/router.php/PoliciesDirect.getPoliciesByUsage',
+                json_cmd=json_cmd)
+
+        def policy_optimizer_get_rules(self, timeframe: str, usage: str, exclude: bool, position: str, rule_type: str,
+                                       page_size: int = 200, limit: int = 200, page: int | None = None) -> dict:
+            def generate_paginated_request(_start: int, _limit: int) -> dict:
+                return {
+                    "action": "PanDirect", "method": "run",
+                    "data": [
+                        self.token_generator(),
+                        "PoliciesDirect.getPoliciesByUsage",
+                        [
+                            {
+                                "type": rule_type,
+                                "position": position,
+                                "vsysName": self.machine,
+                                "isCmsSelected": self.is_cms_selected,
+                                "isMultiVsys": False,
+                                "showGrouped": False,
+                                "usageAttributes": {
+                                    "timeframe": timeframe,
+                                    "usage": usage, "exclude": exclude,
+                                    "exclude-reset-text": "90"
+                                },
+                                "pageContext": "rule_usage",
+                                "start": _start,
+                                "limit": _limit,
+                            }
+                        ]
+                    ],
+                    "type": "rpc",
+                    "tid": self.session_metadata['tid'],
+                }
+
+            self.session_metadata['tid'] += 1  # Increment TID
+
+            start = page_size * (page - 1) if page else 0
+
+            response = self.session_post(
+                url=f'{self.session_metadata["base_url"]}/php/utils/router.php/PoliciesDirect.getPoliciesByUsage',
+                json_cmd=generate_paginated_request(_start=start, _limit=min(page_size, limit)),
+            )
+
+            if page:  # If returning a specific page, we don't need to handle pagination
+                return response
+
+            # Handle pagination
+            total_results_count = int(response.get('result', {}).get('result', {}).get('@total-count', 0))
+            collected_results_count = int(response.get('result', {}).get('result', {}).get('@count', 0))
+
+            while collected_results_count < limit and collected_results_count < total_results_count:
+                offset = collected_results_count
+                remaining_results_count = min(total_results_count - collected_results_count, limit - collected_results_count)
+
+                if remaining_results_count > page_size:  # If we have more than 'page_size' results left to fetch
+                    current_limit = page_size
+
+                else:  # If we have less than 'page_size' results left, we'll set the limit to the amount of the remaining results
+                    current_limit = remaining_results_count
+
+                current_response = self.session_post(
+                    url=f'{self.session_metadata["base_url"]}/php/utils/router.php/PoliciesDirect.getPoliciesByUsage',
+                    json_cmd=generate_paginated_request(_start=offset, _limit=current_limit),
+                )
+
+                # Update collected results
+                current_entry_data = current_response.get('result', {}).get('result', {}).get('entry', [])
+                response['result']['result']['entry'].extend(current_entry_data)
+
+                # Update collected results count
+                current_results_count = int(current_response.get('result', {}).get('result', {}).get('@count', 0))
+                collected_results_count += current_results_count
+                response['result']['result']['@count'] = str(collected_results_count)
+
+            return response
+
+        def policy_optimizer_app_and_usage(self, rule_uuid: str) -> dict:
+            self.session_metadata['tid'] += 1  # Increment TID
+            json_cmd = {"action": "PanDirect", "method": "run",
+                        "data": [
+                            self.token_generator(),
+                            "PoliciesDirect.getAppDetails",
+                            [
+                                {
+                                    "type": "security",
+                                    "vsysName": self.machine,
+                                    "position": "main",
+                                    "ruleUuidList": [rule_uuid],
+                                    "summary": "no",
+                                    "resultfields":
+                                        "<member>apps-seen</member>"
+                                        "<member>last-app-seen-since-count"
+                                        "</member><member>days-no-new-app-count</member>",
+                                    "appsSeenTimeframe": "any",
+                                    "trafficTimeframe": 30
+                                }
+                            ]
+                        ],
+                        "type": "rpc",
+                        "tid": self.session_metadata['tid']}
+
+            return self.session_post(
+                url=f'{self.session_metadata["base_url"]}/php/utils/router.php/PoliciesDirect.getAppDetails',
+                json_cmd=json_cmd)
+
+        def policy_optimizer_get_dag(self, dag: str) -> dict:
+            self.session_metadata['tid'] += 1  # Increment TID
+            json_cmd = {
+                "action": "PanDirect",
+                "method": "execute",
+                "data": [
+                    self.token_generator(),
+                    "AddressGroup.showDynamicAddressGroup", {
+                        "id": dag,
+                        "vsysName": self.machine
+                    }
+                ],
+                "type": "rpc",
+                "tid": self.session_metadata['tid']}
+
+            return self.session_post(
+                url=f'{self.session_metadata["base_url"]}/php/utils/router.php/AddressGroup.showDynamicAddressGroup',
+                json_cmd=json_cmd)
+
+
+    def get_unused_rules_by_position(client: Client, position: str, exclude: bool, rule_type: str, usage: str,
+                                     timeframe: str, page_size: int, limit: int, page: int | None = None) -> tuple[Dict, List]:
+        """
+        Get unused rules from panorama based on user defined arguments.
+        """
+        raw_response = client.policy_optimizer_get_rules(
+            timeframe=timeframe, usage=usage, exclude=exclude, position=position, rule_type=rule_type,
+            page_size=page_size, limit=limit, page=page,
+        )
+
+        stats = raw_response.get('result', {})
+        if stats.get('@status') == 'error':
+            raise Exception(f'Operation failed: {stats}')
+
+        return raw_response, stats.get('result', {}).get('entry', [])
+
+
+    def get_policy_optimizer_statistics_command(client: Client, args: dict) -> CommandResults:
+        """
+        Gets the Policy Optimizer Statistics as seen from the User Interface
+        Args:
+            client:  APN-OS Policy Optimizer client
+            args:  Demisto arguments, will be used in panorama instance only
+        """
+        outputs_stats = {}
+        # panorama instance has multiple positions, firewall instance has only main position
+        position = define_position(version=client.version, args=args, is_panorama=client.is_cms_selected)
+
+        raw_response = client.get_policy_optimizer_statistics(position)
+        stats = raw_response['result']
+        if '@status' in stats and stats['@status'] == 'error':
+            raise Exception(f'Operation Failed with: {str(stats)}')
+
+        stats = stats['result']
+        # we need to spin the keys and values and put them into dict so they'll look better in the context
+        for i in stats['entry']:
+            outputs_stats[i['@name']] = i['text']
+
+        return CommandResults(
+            outputs_prefix='PanOS.PolicyOptimizer.Stats',
+            outputs=outputs_stats,
+            readable_output=tableToMarkdown(name='Policy Optimizer Statistics:', t=stats['entry'], removeNull=True),
+            raw_response=raw_response
+        )
+
+
+    def policy_optimizer_no_apps_command(client: Client, args: dict) -> CommandResults:
+        """
+        Gets the Policy Optimizer Statistics as seen from the User Interface
+        Args:
+            client:  APN-OS Policy Optimizer client
+            args:  Demisto arguments, will be used in panorama instance only
+        Returns:
+            CommandResults object
+        """
+        # panorama instance has multiple positions, firewall instance has only main position
+        position = define_position(version=client.version, args=args, is_panorama=client.is_cms_selected)
+
+        raw_response = client.policy_optimizer_no_apps(position=position)
+        stats = raw_response['result']
+        if '@status' in stats and stats['@status'] == 'error':
+            raise Exception(f'Operation Failed with: {str(stats)}')
+
+        stats = stats['result']
+        if '@count' in stats and stats['@count'] == '0':
+            return CommandResults(readable_output='No Rules without apps were found.', raw_response=raw_response)
+
+        rules_no_apps = stats['entry']
+        if not isinstance(rules_no_apps, list):
+            rules_no_apps = rules_no_apps[0]
+
+        headers = ['@name', '@uuid', 'action', 'description', 'source', 'destination']
+
+        return CommandResults(
+            outputs_prefix='PanOS.PolicyOptimizer.NoApps',
+            outputs_key_field='@uuid',
+            outputs=rules_no_apps,
+            readable_output=tableToMarkdown(name='Policy Optimizer No App Specified:', t=rules_no_apps, headers=headers,
+                                            removeNull=True),
+            raw_response=raw_response
+        )
+
+
+    def policy_optimizer_get_unused_apps_command(client: Client, args: dict) -> CommandResults:
+        """
+        Gets the Policy Optimizer Statistics as seen from the User Interface
+        Args:
+            client:  APN-OS Policy Optimizer client
+            args:  Demisto arguments, will be used in panorama instance only
+        Returns:
+            CommandResults object
+        """
+        # panorama instance has multiple positions, firewall instance has only main position
+        position = define_position(version=client.version, args=args, is_panorama=client.is_cms_selected)
+
+        raw_response = client.policy_optimizer_get_unused_apps(position=position)
+        stats = raw_response['result']
+        if '@status' in stats and stats['@status'] == 'error':
+            raise Exception(f'Operation Failed with: {str(stats)}')
+
+        stats = stats['result']
+        if '@count' in stats and stats['@count'] == '0':
+            return CommandResults(readable_output='No Rules with unused apps were found.', raw_response=raw_response)
+
+        return CommandResults(
+            outputs_prefix='PanOS.PolicyOptimizer.UnusedApps',
+            outputs_key_field='Stats',
+            outputs=stats,
+            readable_output=tableToMarkdown(name='Policy Optimizer Unused Apps:', t=stats['entry'], removeNull=True),
+            raw_response=raw_response
+        )
+
+
+    def policy_optimizer_get_rules_command(client: Client, args: dict) -> CommandResults:
+        """
+        Get rules information from Panorama/Firewall instances.
+        """
+        timeframe: str = args['timeframe']
+        usage: str = args['usage']
+        exclude: bool = argToBoolean(args.get('exclude', False))
+        position: str = args['position'] if client.is_cms_selected else 'main'  # Firewall instances have only main position
+        rule_type: str = args.get('rule_type', 'security')
+        page_size: int = arg_to_number(args.get('page_size')) or 200
+        limit: int = arg_to_number(args.get('limit')) or 200
+        page: int | None = arg_to_number(args.get('page'))
+
+        if page_size > 200:
+            raise ValueError('The maximum page size is 200.')
+
+        params: dict[str, Any] = {  # All params without the 'position' param
+            'client': client,
+            'exclude': exclude,
+            'rule_type': rule_type,
+            'usage': usage,
+            'timeframe': timeframe,
+            'page_size': page_size,
+            'limit': limit,
+            'page': page,
+        }
+
+        rules = []
+
+        if position == 'both':
+            post_raw, post_rules = get_unused_rules_by_position(position='post', **params)
+            pre_raw, pre_rules = get_unused_rules_by_position(position='pre', **params)
+            raw_response = {
+                'post': post_raw,
+                'pre': pre_raw,
+            }
+            rules.extend(post_rules)
+            rules.extend(pre_rules)
+
+        else:
+            raw_response, rules = get_unused_rules_by_position(position=position, **params)
+
+        if rules:
+            headers = ['@name', '@uuid', 'action', 'description', 'source', 'destination']
+            table = tableToMarkdown(
+                name=f'PolicyOptimizer {usage.capitalize()} {rule_type.capitalize()} Rules: ({len(rules)} Results)',
+                t=rules, headers=headers, removeNull=True
+            )
+        else:
+            table = f'No {usage.lower()} {rule_type.lower()} rules were found.'
+
+        return CommandResults(
+            outputs_prefix=f'PanOS.PolicyOptimizer.{usage}Rules',
+            outputs_key_field='@uuid',
+            outputs=rules,
+            readable_output=table,
+            raw_response=raw_response
+        )
+
+
+    def policy_optimizer_app_and_usage_command(client: Client, args: dict) -> CommandResults:
+        """
+        Gets the Policy Optimizer Statistics as seen from the User Interface
+        """
+        rule_uuid = str(args.get('rule_uuid'))
+
+        raw_response = client.policy_optimizer_app_and_usage(rule_uuid)
+
+        stats = raw_response['result']
+        if '@status' in stats and stats['@status'] == 'error':
+            raise Exception(f'Operation Failed with: {str(stats)}')
+
+        stats = stats['result']
+        if '@count' in stats and stats['@count'] == '0':
+            return CommandResults(readable_output=f'Rule with UUID:{rule_uuid} does not use apps.',
+                                  raw_response=raw_response)
+
+        rule_stats = stats['rules']['entry'][0]
+
+        return CommandResults(
+            outputs_prefix='PanOS.PolicyOptimizer.AppsAndUsage',
+            outputs_key_field='@uuid',
+            outputs=rule_stats,
+            readable_output=tableToMarkdown(name='Policy Optimizer Apps and Usage:', t=rule_stats, removeNull=True),
+            raw_response=raw_response
+        )
+
+
+    def policy_optimizer_get_dag_command(client: Client, args: dict) -> CommandResults:
+        """
+        Gets the Dynamic Address group.
+        """
+        dag = str(args.get('dag'))
+        raw_response = client.policy_optimizer_get_dag(dag)
+        result = raw_response['result']
+        if '@status' in result and result['@status'] == 'error':
+            raise Exception(f'Operation Failed with: {str(result)}')
+
+        try:
+            result = result['result']['dyn-addr-grp']['entry'][0]['member-list']['entry']
+        except (KeyError, TypeError, IndexError):
+            return CommandResults(readable_output=f'Dynamic Address Group {dag} was not found.', raw_response=raw_response)
+
+        return CommandResults(
+            outputs_prefix='PanOS.PolicyOptimizer.DAG',
+            outputs_key_field='Stats',
+            outputs=result,
+            readable_output=tableToMarkdown(name='Policy Optimizer Dynamic Address Group:', t=result, removeNull=True),
+            raw_response=raw_response
+        )
+
+
+    ''' HELPER FUNCTIONS '''
+
+
+    def define_position(version: str, args: dict, is_panorama: bool) -> str:
+        """
+        This function defines the rule's position in the query. For Panorama instances from versions 10.2.0 and above
+        it uses the `position` argument;
+        for Firewall instances, it always uses 'main' position.
+        Currently, it's fixed for versions 10.2.0 and above, as those are the accessible versions.
+        Args:
+            version: PAN-OS version
+            args: Demisto arguments
+            is_panorama: True if the instance is Panorama, False if the instance is a firewall
+        Returns:
+            The position of the rule in the query (pre, post or main)
+        """
+        if LooseVersion(version) >= LooseVersion('10.2.0') and is_panorama:
+            return args.get('position', 'pre')
+        else:
+            return 'main'
+
+
+    def is_cms_selected(version: str, is_panorama: bool) -> bool:
+        """"
+        in panorama the 'isCmsSelected' parameter should be True, in firewall it is False.
+        this should be probably fixed in all versions,
+        but for now we'll just fix it for version 10.2.0 and above since that's the version we have access to.
+        Args:
+            version (str): PAN-OS version
+            is_panorama (bool): True if the instance is Panorama, False if the instance is a firewall
+
+        Returns:
+            bool: True or False
+        """
+        return is_panorama if LooseVersion(version) >= LooseVersion('10.2.0') else False
+
+
+    def main():  # pragma: no cover
+        command = demisto.command()
+        params = demisto.params()
+        args = demisto.args()
+        version = params.get('version') or '8'
+        demisto.debug(f'Command being called is: {command}')
+        client: Client = None  # type: ignore
+        try:
+            client = Client(url=params.get('server_url'), username=params['credentials']['identifier'],
+                            password=params['credentials']['password'], vsys=params.get('vsys'),
+                            device_group=params.get('device_group'), verify=not params.get('insecure'), tid=50, version=version)
+            client.session_metadata['cookie_key'] = client.login()  # Login to PAN-OS and return the GUI cookie value
+            headers = {}
+            if LooseVersion(version) >= LooseVersion('10.1.6'):
+                headers['Cookie'] = client.session_metadata["cookie"]
+                headers['Content-Type'] = 'application/json'
+                client.session_metadata["headers"] = headers
+            if command == 'test-module':
+                # run a command to test connectivity
+                get_policy_optimizer_statistics_command(client, args)
+                return_results('ok')
+            elif command == 'pan-os-po-get-stats':
+                return_results(get_policy_optimizer_statistics_command(client, args))
+            elif command == 'pan-os-po-no-apps':
+                return_results(policy_optimizer_no_apps_command(client, args))
+            elif command == 'pan-os-po-unused-apps':
+                return_results(policy_optimizer_get_unused_apps_command(client, args))
+            elif command == 'pan-os-po-get-rules':
+                return_results(policy_optimizer_get_rules_command(client, args))
+            elif command == 'pan-os-po-app-and-usage':
+                return_results(policy_optimizer_app_and_usage_command(client, args))
+            elif command == 'pan-os-get-dag':
+                return_results(policy_optimizer_get_dag_command(client, args))
+            else:
+                raise NotImplementedError(f'Command {command} was not implemented.')
+
+        except Exception as err:
+            return_error(f'{str(err)}.\n Trace:{traceback.format_exc()}')
+
+        finally:
+            try:
+                client.logout()  # Logout of PAN-OS
+            except Exception as err:
+                return_error(f'{str(err)}.\n Trace:{traceback.format_exc()}')
+
+
+    if __name__ in ("__builtin__", "builtins", '__main__'):
+        main()
+
+    register_module_line('PAN-OS Policy Optimizer', 'end', __line__())
+  subtype: python3
+  type: python
+system: true
