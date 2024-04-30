@@ -1,0 +1,69 @@
+comment: Entry widget that returns the number of rules with unused applications found
+  by PAN-OS policy optimizer.
+commonfields:
+  id: EntryWidgetUnusedApplications
+  version: -1
+contentitemexportablefields:
+  contentitemfields:
+    definitionid: ""
+    fromServerVersion: 6.0.0
+    itemVersion: 1.1.25
+    packID: PANOSPolicyOptimizer
+    packName: PAN-OS Policy Optimizer (beta)
+    packPropagationLabels:
+    - all
+    prevname: ""
+    propagationLabels: []
+    toServerVersion: ""
+dockerimage: demisto/python3:3.10.12.63474
+enabled: true
+engineinfo: {}
+mainengineinfo: {}
+name: EntryWidgetUnusedApplications
+pswd: ""
+runas: DBotWeakRole
+runonce: false
+script: |
+  register_module_line('EntryWidgetUnusedApplications', 'start', __line__())
+  ### pack version: 1.1.25
+
+
+
+  no_apps = demisto.get(demisto.context(), 'PanOS.PolicyOptimizer.UnusedApps', [])
+
+  data = {
+      "Type": 17,
+      "ContentsFormat": "number",
+      "Contents": {
+          "stats": len(no_apps),
+          "params": {
+              "layout": "horizontal",
+              "name": "Rules with Unused Apps",
+              "sign": "",
+              "colors": {
+                  "items": {
+                      "#00CD33": {
+                          "value": -1
+                      },
+                      "#FF9000": {
+                          "value": 0
+                      },
+                      "#FF1744": {
+                          "value": 3
+                      }
+                  }
+              },
+              "type": "above"
+          }
+      }
+  }
+
+  demisto.results(data)
+
+  register_module_line('EntryWidgetUnusedApplications', 'end', __line__())
+scripttarget: 0
+subtype: python3
+system: true
+tags:
+- dynamic-section
+type: python
